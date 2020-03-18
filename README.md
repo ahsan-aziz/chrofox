@@ -50,6 +50,8 @@ In linux, the cookies (stored in sqlite file "Cookies") and passwords (stored in
          
          
 Below is a visual description of algorithm used in linux for chrome credentials:
+
+
 ![chrome-linux](https://github.com/spaceintotime/chrofire/raw/master/chrome-linux.jpg)
 
 
@@ -71,4 +73,6 @@ Firefox deos not encrypt cookies. The encryption algorithm for username-password
 
 
 Below is a visual descripton of the algorithm:
+
+
 ![fireforx-algo](https://github.com/spaceintotime/chrofire/raw/master/firefox-algo.jpg)
