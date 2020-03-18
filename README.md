@@ -25,7 +25,7 @@ python chrofire.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.d
 
 \
 \
-\
+
 
 ## Chrome and Firefox password encryption algorithms
 
