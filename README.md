@@ -23,7 +23,7 @@ python chrofire.py -b chrome -c cookies    //get only cookies from chrome
 python chrofire.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.default/    //get passwords from firefox
 ```
 
-\
+
 \
 
 
