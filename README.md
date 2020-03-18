@@ -27,7 +27,6 @@ python chrofire.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.d
 
 
 
-
 ## Chrome and Firefox password encryption algorithms
 
 Below is a high level explanation of encryption algorithms used by chrome and firefox to save passwords.
