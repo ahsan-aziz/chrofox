@@ -23,7 +23,9 @@ python chrofire.py -b chrome -c cookies    //get only cookies from chrome
 python chrofire.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.default/    //get passwords from firefox
 ```
 
-
+\
+\
+\
 
 ## Chrome and Firefox password encryption algorithms
 
@@ -60,7 +62,9 @@ Below is a visual description of algorithm used in linux for chrome credentials:
 
 
 
-**Firefox in Linux and Windows**
+\
+\
+**Firefox in Linux and Windows:**
 
 Firefox deos not encrypt cookies. The encryption algorithm for username-password is same for Windows and Linux. 
 
