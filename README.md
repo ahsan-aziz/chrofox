@@ -1,26 +1,26 @@
-# chrofire
+# chrofox
 
-Have you ever used "save password" option in chrome or firefox? wonder where does the browser save these credentials and how secure is it? Bad news is it's not very secure, if your computer catches a malware or someone gets few second access of your computer (e.g. you were on free public wifi and an adversary got access of your system by compromising an application which you never updated), it will only take a script like **chrofire.py** to get all your saved credentials/cookies. It is also possible to get other saved data (credit card numbers, name, address, bookmarks, history, anything which you have saved in browser). So how to secure it? avoid saving data in browsers or at-least secure your passwords; if you're using firefox, enable Master Password, in this case all the username/passwords would get encrypted using Master Password; chrome doesn't have any feature like this, best option would be to use a password manager e.g. [lastPass](https://www.lastpass.com/).
+Have you ever used "save password" option in chrome or firefox? wonder where does the browser save these credentials and how secure is it? Bad news is it's not very secure, if your computer catches a malware or someone gets few second access of your computer (e.g. you were on free public wifi and an adversary got access of your system by compromising an application which you never updated), it will only take a script like **chrofox.py** to get all your saved credentials/cookies. It is also possible to get other saved data (credit card numbers, name, address, bookmarks, history, anything which you have saved in browser). So how to secure it? avoid saving data in browsers or at-least secure your passwords; if you're using firefox, enable Master Password, in this case all the username/passwords would get encrypted using Master Password; chrome doesn't have any feature like this, best option would be to use a password manager e.g. [lastPass](https://www.lastpass.com/).
 
-**chrofire.py** can extract username-passwords and cookies from chrome and firefox. **You need python3 to run the script**. Here is the usage:
+**chrofox.py** can extract username-passwords and cookies from chrome and firefox. **You need python3 to run the script**. Here is the usage:
 
 Windows:
 ```
 pip install -r requirements-windows.txt
-python chrofire.py         //this will only get chrome credentials
-python chrofire.py -h      //help
-python chrofire.py -b firefox -d C:\Users\%username%\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get credentials from firefox, look for file key4.db for firefox direcotry
-python chrofire.py -b chrome -c cookies    //get only cookies from chrome
-python chrofire.py -b firefox -c passwords -d C:\Users\%username%\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get passwords from firefox
+python chrofox.py         //this will only get chrome credentials
+python chrofox.py -h      //help
+python chrofox.py -b firefox -d C:\Users\%username%\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get credentials from firefox, look for file key4.db for firefox direcotry
+python chrofox.py -b chrome -c cookies    //get only cookies from chrome
+python chrofox.py -b firefox -c passwords -d C:\Users\%username%\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get passwords from firefox
 ```
 Linux:
 ```
 pip install -r requirements-linux.txt
-python chrofire.py         //this will only get chrome credentials
-python chrofire.py -h      //help
-python chrofire.py -b firefox -d /%username%/.mozilla/firefox/***.default/    //get credentials from firefox (run "locat key4.db" to get the directory)
-python chrofire.py -b chrome -c cookies    //get only cookies from chrome
-python chrofire.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.default/    //get passwords from firefox
+python chrofox.py         //this will only get chrome credentials
+python chrofox.py -h      //help
+python chrofox.py -b firefox -d /%username%/.mozilla/firefox/***.default/    //get credentials from firefox (run "locat key4.db" to get the directory)
+python chrofox.py -b chrome -c cookies    //get only cookies from chrome
+python chrofox.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.default/    //get passwords from firefox
 ```
 
 
@@ -56,7 +56,7 @@ In linux, the cookies (stored in sqlite file "Cookies") and passwords (stored in
 Below is a visual description of algorithm used in linux for chrome credentials:
 
 
-![chrome-linux](https://github.com/spaceintotime/chrofire/raw/master/chrome-linux.jpg)
+![chrome-linux](https://github.com/spaceintotime/chrofox/raw/master/chrome-linux.jpg)
 
 
 
@@ -85,4 +85,4 @@ Firefox deos not encrypt cookies. The encryption algorithm for username-password
 Below is a visual descripton of the algorithm:
 
 
-![fireforx-algo](https://github.com/spaceintotime/chrofire/raw/master/firefox-algo.jpg)
+![fireforx-algo](https://github.com/spaceintotime/chrofox/raw/master/firefox-algo.jpg)
