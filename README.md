@@ -1,6 +1,6 @@
 # chrofox
 
-Have you ever used "save password" option in chrome or firefox? wonder where does the browser save these credentials and how secure is it? Bad news is it's not very secure, if your computer catches a malware or someone gets few second access of your computer (e.g. you were on free public wifi and an adversary got access of your system by compromising an application which you never updated), it will only take a script like **chrofox.py** to get all your saved credentials/cookies. It is also possible to get other saved data (credit card numbers, name, address, bookmarks, history, anything which you have saved in browser). So how to secure it? avoid saving data in browsers or at-least secure your passwords; if you're using firefox, enable Master Password, in this case all the username/passwords would get encrypted using Master Password; chrome doesn't have any feature like this, best option would be to use a password manager e.g. [lastPass](https://www.lastpass.com/).
+Have you ever used "save password" option in chrome or firefox? wondered where does the browser save these credentials and how secure is it? Bad news is it's not very secure, if your computer catches a malware or someone gets few seconds access of your computer (e.g. you were on free public wifi and an adversary got access of your system by compromising an application which you never updated) or you interacted with a malicious attachement received in email, it will only take a script like **chrofox.py** to get all your saved credentials/cookies. It is also possible to get other saved data (credit card numbers, name, address, bookmarks, history, anything which you have saved in browser). So how to secure it? avoid saving data in browsers or at-least secure your passwords; if you're using firefox, enable Master Password, in this case all the username/passwords would get encrypted using Master Password; chrome doesn't have any feature like this, the best option would be to use a password manager e.g. [lastPass](https://www.lastpass.com/).
 
 **chrofox.py** can extract username-passwords and cookies from chrome and firefox. **You need python3 to run the script**. Here is the usage:
 
@@ -25,13 +25,14 @@ python chrofox.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.de
 
 
 
-
+<br />
+<br />
 
 ## Chrome and Firefox password encryption algorithms
 
-Below is a high level explanation of encryption algorithms used by chrome and firefox to save passwords.
+Below is a high level explanation of encryption algorithms used by chrome and firefox to save credentials.
 
-Chrome save passwords in Windows and Linux differently. 
+Chrome's encryption algorithm is not the same for all operating systems. 
 
 **Chrome in Windows:**
 
@@ -40,13 +41,13 @@ Chrome uses the so-called Data Protection API (DPAPI), which is in Windows from 
 
 **Chrome in Linux:**
 
-In linux, the cookies (stored in sqlite file "Cookies") and passwords (stored in "Login Data") are encryted with AES CBC mode. To decrypt the data we need:
+In linux, the cookies (stored in sqlite file "Cookies") and passwords (stored in sqlite file "Login Data") are encryted with AES CBC mode. To decrypt the data we need:
         
         1. KEY. The key is derived using key derivation function PBKDF2, the PBKDF2 requires 4 parameters:
         
             i. Secret password. This is "Chrome Safe Storage" password stored in the keychain. We can use secretstorage which uses D-Bus. Secret Service API that is supported by GNOME Keyring.
             ii. Salt. Most probably the salt would be "saltysalt"
-            iii. Lengh. The cumulative length of the desired keys. Default is 16 bytes, suitable for instance for Crypto.Cipher.AES.
+            iii. Length. The cumulative length of the desired keys. Default is 16 bytes, suitable for instance for Crypto.Cipher.AES.
             iv. Count. An integer for no. of interations.
             
          2. AES Mode. Which is CBC.
@@ -62,8 +63,9 @@ Below is a visual description of algorithm used in linux for chrome credentials:
 
 
 
-\
-\
+<br />
+<br />
+
 **Firefox in Linux and Windows:**
 
 Firefox deos not encrypt cookies. The encryption algorithm for username-password is same for Windows and Linux. 
@@ -86,3 +88,7 @@ Below is a visual descripton of the algorithm:
 
 
 ![fireforx-algo](https://github.com/spaceintotime/chrofox/raw/master/firefox-algo.jpg)
+
+<br />
+
+Please let me know if you spot any mistake in the above algorithms. Thanks!
