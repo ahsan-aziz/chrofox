@@ -9,18 +9,28 @@ Windows:
 pip install -r requirements-windows.txt
 python chrofox.py         //this will only get chrome credentials
 python chrofox.py -h      //help
-python chrofox.py -b firefox -d C:\Users\%username%\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get credentials from firefox, look for file key4.db for firefox direcotry
+python chrofox.py -b firefox -d C:\Users\_YourUserName_\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get credentials from firefox, look for file key4.db for firefox direcotry
 python chrofox.py -b chrome -c cookies    //get only cookies from chrome
-python chrofox.py -b firefox -c passwords -d C:\Users\%username%\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get passwords from firefox
+python chrofox.py -b firefox -c passwords -d C:\Users\_YourUserName_\AppData\Roaming\Mozilla\Firefox\Profiles\***.default\    //get passwords from firefox
 ```
+<br />
+
+<code>
+In Windows if you get erorr "No module name Crypto.Cipher". You have to change the package folder name from <b>crypto</b> into <b>Crypto</b>. It is a [known issue](https://github.com/dlitz/pycrypto/issues/156).  
+        1. find out <b>crypto</b> path, the usual directory is: ***C:\Users\_YourUserName_\AppData\Local\Programs\Python\Python37-32\Lib\site-packages\*
+    2. You can see a folder named: <b>crypto</b> rename it to <b>Crypto</b>. (the second one starts with a capital C)
+</code>
+
+<br />
+
 Linux:
 ```
 pip install -r requirements-linux.txt
 python chrofox.py         //this will only get chrome credentials
 python chrofox.py -h      //help
-python chrofox.py -b firefox -d /%username%/.mozilla/firefox/***.default/    //get credentials from firefox (run "locat key4.db" to get the directory)
+python chrofox.py -b firefox -d /_YourUserName_/.mozilla/firefox/****.default/    //get credentials from firefox (run "locat key4.db" to get the directory)
 python chrofox.py -b chrome -c cookies    //get only cookies from chrome
-python chrofox.py -b firefox -c passwords -d /%username%/.mozilla/firefox/***.default/    //get passwords from firefox
+python chrofox.py -b firefox -c passwords -d /_YourUserName_/.mozilla/firefox/***.default/    //get passwords from firefox
 ```
 
 
