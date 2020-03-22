@@ -16,9 +16,7 @@ python chrofox.py -b firefox -c passwords -d C:\Users\_YourUserName_\AppData\Roa
 <br />
 
 <code>
-In Windows if you get erorr "No module name Crypto.Cipher". You have to change the package folder name from <b>crypto</b> into <b>Crypto</b>. It is a <a href="https://github.com/dlitz/pycrypto/issues/156">known issue</a>.  
-        1. find out <b>crypto</b> path, the usual directory is: ***C:\Users\_YourUserName_\AppData\Local\Programs\Python\Python37-32\Lib\site-packages\*
-    2. You can see a folder named: <b>crypto</b> rename it to <b>Crypto</b>. (the second one starts with a capital C)
+In Windows if you get erorr "No module name Crypto.Cipher". You have to change the package folder name from <b>crypto</b> into <b>Crypto</b>. It is a <a href="https://github.com/dlitz/pycrypto/issues/156">known issue</a>.Find out <b>crypto</b> path, the usual directory is: <b>C:\Users\_YourUserName_\AppData\Local\Programs\Python\Python37-32\Lib\site-packages\</b>. You can see a folder named: <b>crypto</b> rename it to <b>Crypto</b>. (the second one starts with a capital C)
 </code>
 
 <br />
