@@ -1,6 +1,6 @@
 # chrofox
 
-Have you ever used "save password" option in chrome or firefox? wondered where the browser save these credentials and how secure is it? Bad news is it's not very secure, if your computer catches a malware or someone gets few seconds access of your computer (e.g. you were on free public wifi and an adversary got access of your system by compromising an application which you never updated) or you interacted with a malicious attachement received in an email, it will only take a script like **chrofox.py** to get all your saved credentials/cookies. It is also possible to get other saved data (credit card numbers, name, address, bookmarks, history, anything which you have saved in browser). So how to secure it? avoid saving data in browsers or at-least secure your passwords; if you're using firefox, enable Master Password, in this case all the username/passwords would get encrypted using Master Password; chrome doesn't have any feature like this, the best option would be to use a password manager e.g. [lastPass](https://www.lastpass.com/).
+Have you ever used "save password" option in chrome or firefox? wondered where the browser save these credentials and how secure is it? Bad news is it's not very secure, if your computer catches a malware or someone gets few seconds access of your computer (e.g. you were on free public wifi and an adversary got access of your system by compromising an application which you never updated) or you have interacted with a malicious attachement received in an email, it will only take a script like **chrofox.py** to get all your saved credentials/cookies. It is also possible to get other saved data (credit card numbers, name, address, bookmarks, history, anything which you have saved in browser). So how to secure it? avoid saving data in browsers or at-least encrypt your passwords; if you're using firefox, enable Master Password, in this case all the username/passwords would get encrypted using Master Password; chrome doesn't have any feature like this, the best option would be to use a password manager e.g. [lastPass](https://www.lastpass.com/).
 
 **chrofox.py** can extract username-passwords and cookies from chrome and firefox. **You need python3 to run the script**. Here is the usage:
 
@@ -16,11 +16,12 @@ python chrofox.py -b firefox -c passwords -d C:\Users\_YourUserName_\AppData\Roa
 <br />
 
 <code>
-In Windows if you get erorr "No module name Crypto.Cipher". You have to change the package folder name from <b>crypto</b> into <b>Crypto</b>. It is a [known issue](https://github.com/dlitz/pycrypto/issues/156).  
+In Windows if you get erorr "No module name Crypto.Cipher". You have to change the package folder name from <b>crypto</b> into <b>Crypto</b>. It is a <a href="https://github.com/dlitz/pycrypto/issues/156">known issue</a>.  
         1. find out <b>crypto</b> path, the usual directory is: ***C:\Users\_YourUserName_\AppData\Local\Programs\Python\Python37-32\Lib\site-packages\*
     2. You can see a folder named: <b>crypto</b> rename it to <b>Crypto</b>. (the second one starts with a capital C)
 </code>
 
+<br />
 <br />
 
 Linux:
