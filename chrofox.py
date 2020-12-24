@@ -336,8 +336,12 @@ def main():
             cookieList,passwordList = getFirefoxCredentials(dirFirefox, args.password, args.credentials)
             if cookieList:
                 printNicely("(+) Firefox Cookies:", cookieList)
+            if not cookieList and args.credentials == "cookies":
+                printNicely("(-) Couldn't decrypt firefox cookies")
             if passwordList:
                 printNicely("(+) Firefox Passwords:", passwordList)
+            if not passwordList and args.credentials == "passwords":
+                printNicely("(-) Couldn't decrypt firefox passwords")
         if os.path.isdir(dirChrome) and (args.browser == "chrome" or args.browser == "all"):
             cookieList,passwordList = getChromeCredentials(dirChrome, args.credentials)
             if cookieList:
@@ -362,3 +366,4 @@ if __name__== '__main__':
             sys.exit(0)
         except SystemExit:
             os._exit(0)
+
