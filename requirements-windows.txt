@@ -1,6 +1,6 @@
 colorama==0.4.3
 crypto==1.4.1
-cryptography==2.8
+cryptography==39.0.1
 pyasn1==0.4.8
 pycryptodome==3.9.7
 pypiwin32==223
